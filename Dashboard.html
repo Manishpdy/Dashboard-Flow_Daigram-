@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Flows</title>
+    <style>
+        /* Container for the flowchart */
+        .flowchart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            flex-direction: column;
+            padding: 10px; /* Reduced padding */
+        }
+
+        /* Heading Style */
+        h1 {
+            font-size: 30px;
+            color: #264653;
+            margin-bottom: 5px; /* Reduced margin */
+        }
+
+        /* Basic style for each node in the flowchart */
+        .node {
+            background-color: #a8dadc; /* Green background color for all nodes */
+            border-radius: 5px;
+            border: 2px solid #333;
+            padding: 15px;
+            margin: 5px; /* Reduced margin */
+            text-align: center;
+            font-weight: bold;
+            box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
+            width: 160px;
+            font-size: 14px;
+        }
+
+        /* Arrows between the nodes */
+        .arrow {
+            font-size: 20px;
+            color: #333;
+            margin: 0 5px; /* Reduced margin */
+        }
+
+        /* Colorful styles for different steps */
+        .red-step {
+            background-color: #e76f51; /* Red color for the step that has more errors */
+            color: white;
+            cursor: pointer; /* Indicate it is clickable */
+        }
+
+        /* Flexbox setup for horizontal layout */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap; /* Wraps the flowchart if it exceeds the screen width */
+        }
+
+        /* Removed space between different flow sections */
+        .flow-section {
+            margin-bottom: 0px; /* Removed space between sections */
+        }
+
+        /* Custom error popup styles */
+        .error-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f8d7da; /* Light red background */
+            color: #721c24; /* Dark red text */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: none;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .error-popup .close-btn {
+            background-color: #721c24;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Amazon Account Creation Flow -->
+    <div class="flowchart-container flow-section">
+        <h1>Amazon Account Creation</h1>
+        <div class="flow">
+            <div class="node">User</div>
+            <div class="arrow">→</div>
+            <div class="node">Sign Up Page</div>
+            <div class="arrow">→</div>
+            <div class="node">Enter Email</div>
+            <div class="arrow">→</div>
+            <div class="node red-step" onclick="showErrorMessage('Enter Password')">Enter Password</div> <!-- Red step (highlighted) -->
+            <div class="arrow">→</div>
+            <div class="node">Confirm Email</div>
+            <div class="arrow">→</div>
+            <div class="node">Confirm Account</div>
+            <div class="arrow">→</div>
+            <div class="node">Enter Personal Info</div>
+            <div class="arrow">→</div>
+            <div class="node">Verify Info</div>
+            <div class="arrow">→</div>
+            <div class="node">Complete Registration</div>
+            <div class="arrow">→</div>
+            <div class="node">Login Page</div>
+        </div>
+    </div>
+
+    <!-- Amazon Order Placement Flow -->
+    <div class="flowchart-container">
+        <h1>Amazon Order Placement</h1>
+        <div class="flow">
+            <div class="node">User Logs In</div>
+            <div class="arrow">→</div>
+            <div class="node">Search Products</div>
+            <div class="arrow">→</div>
+            <div class="node">Add to Cart</div>
+            <div class="arrow">→</div>
+            <div class="node">Proceed to Checkout</div>
+            <div class="arrow">→</div>
+            <div class="node">Enter Shipping Info</div>
+            <div class="arrow">→</div>
+            <div class="node red-step" onclick="showErrorMessage('Select Payment')">Select Payment</div>
+            <div class="arrow">→</div>
+            <div class="node">Place Order</div>
+        </div>
+    </div>
+
+    <!-- Product Replacement Flow -->
+    <div class="flowchart-container flow-section">
+        <h1>Amazon Order Replacement</h1>
+        <div class="flow">
+            <div class="node">User</div>
+            <div class="arrow">→</div>
+            <div class="node">Log into Amazon Account</div>
+            <div class="arrow">→</div>
+            <div class="node">Select Product</div>
+            <div class="arrow">→</div>
+            <div class="node">Provide Reason for Replacement</div>
+            <div class="arrow">→</div>
+            <div class="node">Check Eligibility for Replacement</div>
+            <div class="arrow">→</div>
+            <div class="node">Choose Replacement Option</div>
+            <div class="arrow">→</div>
+            <div class="node">Submit Request</div>
+            <div class="arrow">→</div>
+            <div class="node red-step" onclick="showErrorMessage('Return the Product')">Return the Product</div> <!-- Red step (highlighted) -->
+            <div class="arrow">→</div>
+            <div class="node">Receive Replacement Item</div>
+        </div>
+    </div>
+
+    <!-- Custom Error Popup -->
+    <div id="error-popup" class="error-popup">
+        <div id="error-message"></div>
+        <button class="close-btn" onclick="closeErrorPopup()">Close</button>
+    </div>
+
+    <script>
+        function showErrorMessage(stepName) {
+            let errorMessage = "";
+
+            if (stepName === "Enter Password") {
+                // Three error types for "Enter Password"
+                errorMessage = "<strong>Error:</strong> The password is too weak. Please choose a stronger password.<br>";
+                errorMessage += "<strong>Error:</strong> Password length should be at least 8 characters.<br>";
+                errorMessage += "<strong>Error:</strong> Password should contain at least one number.<br>";
+            } else if (stepName === "Select Payment") {
+                // Three error types for "Select Payment"
+                errorMessage = "<strong>Error:</strong> Payment method is invalid or missing.<br>";
+                errorMessage += "<strong>Error:</strong> Your credit card has expired. Please update your payment details.<br>";
+                errorMessage += "<strong>Error:</strong> Insufficient funds available in your account.<br>";
+            } else if (stepName === "Return the Product") {
+                // Three error types for "Return the Product"
+                errorMessage = "<strong>Error:</strong> The product cannot be returned after the 30-day return period.<br>";
+                errorMessage += "<strong>Error:</strong> The product is non-returnable due to hygiene reasons.<br>";
+                errorMessage += "<strong>Error:</strong> The product was opened and is no longer eligible for return.<br>";
+            }
+
+            // Display the error message in the custom popup
+            document.getElementById("error-message").innerHTML = errorMessage;
+            document.getElementById("error-popup").style.display = "block";
+        }
+
+        function closeErrorPopup() {
+            document.getElementById("error-popup").style.display = "none";
+        }
+    </script>
+
+</body>
+</html>
+
